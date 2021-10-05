@@ -1,0 +1,232 @@
+<template>
+  <header class="desktop">
+    <router-link to="/"
+      ><img
+        src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png"
+        class="logo"
+    /></router-link>
+    <div class="search">
+      <input type="text" class="searchinput" placeholder="Search Amazon" />
+      <div class="searchicon">&nbsp;</div>
+    </div>
+    <nav>
+      <div><span>Hello guest</span> <span>Sign in</span></div>
+      <div><span>Returns</span> <span>and Orders</span></div>
+    </nav>
+    <div class="cart">
+      <!-- <div>{{ basketlength }}</div> -->
+    </div>
+  </header>
+  <!-- MOBIL: -->
+  <header class="mobile">
+    <div class="mobile-nav-and-logo">
+      <img
+        src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png"
+        class="logo"
+      />
+      <div class="sign-in-cart">
+        <div class="signin-text">Sign in ></div>
+        <div class="signin-icon"><img src="../assets/signin.png" /></div>
+        <!-- <div class="mobile-cart"><div>{{ basketlength }}</div></div> -->
+      </div>
+    </div>
+    <div class="search-mobile">
+      <input
+        type="text"
+        class="searchinput-mobile"
+        placeholder="Search Amazon"
+      />
+      <div class="searchicon">&nbsp;</div>
+    </div>
+  </header>
+</template>
+
+<script>
+export default {
+  computed: {
+    // basketlength() {
+    //   return this.$store.getters.showBasketLength;
+    // },
+  },
+};
+</script>
+
+<style scoped>
+.logo {
+  cursor: pointer;
+}
+.mobile-nav-and-logo {
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+}
+.mobile {
+  display: none;
+}
+.inputmobile {
+  margin: 10px 0;
+}
+.signin-text {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 12px;
+  letter-spacing: 0.03rem;
+  font-weight: 100;
+}
+.signin-icon img {
+  width: 30px;
+  margin-left: 3px;
+  margin-top: 16px;
+  margin-right: 10px;
+}
+.sign-in-cart {
+  display: flex;
+}
+.search-mobile {
+  display: flex;
+  margin: 10px 10px 5px 10px;
+  width: 94vw;
+}
+.searchinput-mobile {
+  width: 100%;
+  /* flex: 1; */
+  line-height: 15px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  height: 38px;
+  font-family: inherit;
+  font-size: 15px;
+  border-radius: 3px 0 0 3px;
+  outline: 0;
+  -webkit-appearance: none;
+  box-shadow: none;
+  text-indent: 8px;
+  direction: ltr;
+}
+.mobile-cart {
+  color: #f08804;
+  width: 41px;
+  height: 38px;
+  /* border: 1px solid white; */
+  display: flex;
+  justify-content: center;
+  background-image: url("../assets/handlekurv.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 12px 10px 10px 0;
+}
+.cart {
+  color: #f08804;
+  width: 41px;
+  height: 38px;
+  /* border: 1px solid white; */
+  display: flex;
+  justify-content: center;
+  background-image: url("../assets/handlekurv.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 10px;
+}
+.cart div,
+.mobile-cart div {
+  font-size: 16px;
+  text-align: center;
+  line-height: 16px;
+  font-weight: 600;
+  margin-left: 4px;
+  margin-top: 1px;
+}
+header {
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: rgb(6, 25, 39);
+  /* position: sticky;
+  top: 0; */
+  z-index: 100;
+}
+.search {
+  display: flex;
+  margin: 0 10px 0 0;
+
+  flex: 1;
+}
+.searchicon {
+  height: 38px;
+  width: 45px;
+  height: 38px;
+  background-color: hsl(35, 98%, 70%);
+  border-radius: 0 3px 3px 0;
+
+  background-image: url("../assets/searchglass.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.searchinput {
+  width: 100%;
+  /* flex: 1; */
+  line-height: 15px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  height: 38px;
+  font-family: inherit;
+  font-size: 15px;
+  border-radius: 3px 0 0 3px;
+  outline: 0;
+  -webkit-appearance: none;
+  box-shadow: none;
+  text-indent: 8px;
+  direction: ltr;
+}
+header img {
+  width: 100px;
+  margin: 0 20px;
+  object-fit: contain;
+  margin: 0 20px;
+  margin-top: 11px;
+}
+nav {
+  color: #fff;
+  display: flex;
+  justify-content: space-evenly;
+}
+nav div {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+  font-size: 14px;
+  line-height: 15px;
+  font-weight: 700;
+}
+nav div span:first-child {
+  font-size: 12px;
+  line-height: 14px;
+  height: 14px;
+  font-weight: 400;
+}
+@media screen and (max-width: 600px) {
+  .mobile {
+    display: flex;
+  }
+  .desktop {
+    display: none;
+  }
+  header {
+    height: fit-content;
+    padding-bottom: 15px;
+    flex-direction: column;
+  }
+  nav {
+    display: none;
+  }
+}
+</style>
