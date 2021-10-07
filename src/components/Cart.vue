@@ -1,33 +1,38 @@
 <template>
-  <small>{{ basket }}</small>
+  <!-- <small>{{ products }}</small> -->
   <div class="checkout-container">
     <h3>
-      <span class="not-bold">Subtotal</span> <span class="super">$</span>33<span
-        class="super"
-        >59</span
-      >
+      <span class="not-bold">Subtotal</span>
+      <span class="super">$</span>
+      {{ cartTotalPrice }}
+      <span class="super">59</span>
     </h3>
-    <button class="checkout">Proceed to checkout (2 items)</button>
+    <button class="checkout">Proceed to checkout ({{ this.cartTotalItems }} items)</button>
   </div>
 
-  <div class="mobilecontainer" v-for="(item, index) in products" :key="index">
+  <div class="mobilecontainer" v-for="(item, index) in cartProducts" :key="index">
     <article class="mobile">
       <div>
         <img :src="item.image" class="mainimg" />
       </div>
       <div class="mobile-products-description">
-        <h4>Nike Sweater Excellence</h4>
-        <div class="price"><small>$</small>{{ item.price }}</div>
-        <div class="instock">In stock</div>
+        <h4>{{ item.title }}</h4>
+        <div class="price">
+          <small>$</small>
+          {{ item.price }}
+        </div>
+        <div class="instock">In Stock</div>
+        <!-- <div class="instock" v-if="inStock(item.id) !== 0">In stock ({{ inStock(item.id) }})</div>
+        <div class="instock" style="color:red;" v-else>Out of stock</div> -->
       </div>
     </article>
 
     <div class="cartnumber">
-      <button>-</button>
-      <input type="number" max="10" :value="item.itemCount" />
-      <button>+</button>
+      <button @click="decrementCartItem(item)">-</button>
+      <input type="number" :value="item.quantity" />
+      <button :disabled="inStock(item.id) == 0" @click="addProductToCart(item)">+</button>
     </div>
-    <button class="whitebutton" @click="deleteBasketItem(index)">Delete</button>
+    <button class="whitebutton" @click="removeProductFromCart(item)">Delete</button>
   </div>
   <div class="checkout-container">
     <button class="checkout" style="margin-top: 30px">Continue shopping</button>
@@ -35,27 +40,50 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 export default {
   methods: {
-    deleteBasketItem(index) {
-      // console.log(index);
-      this.$store.dispatch("deleteBasketItem", { index: index });
-    },
+    // inStock(id) {
+    //   this.$store.dispatch("products/inStock", { id: id });
+    // },
+    // deleteBasketItem(index) {
+    //   // console.log(index);
+    //   this.$store.dispatch("deleteBasketItem", { index: index });
+    // },
     checkout(products) {
       this.$store.dispatch("cart/checkout", products);
     },
+    decrementCartItem(item) {
+      this.$store.dispatch("cart/removeItemFromCart", item);
+    },
+    removeProductFromCart(item) {
+      this.$store.dispatch("cart/removeProductFromCart", item);
+    },
+    ...mapActions("cart", [
+      "addProductToCart", // ->( this.addToBasket())
+    ]),
   },
   computed: {
     // basket() {
     //   return this.$store.getters.showBasket;
     // },
+    // cartTotalItems() {
+    //   let totalQuantity = 0;
+    //   for (let i = 0; this.cartProducts.length > i; i++) {
+    //     totalQuantity = totalQuantity + this.cartProducts[i].quantity;
+    //   }
+    //   return totalQuantity;
+    // },
     ...mapState({
       checkoutStatus: (state) => state.cart.checkoutStatus,
     }),
     ...mapGetters("cart", {
-      products: "cartProducts",
-      total: "cartTotalPrice",
+      cartProducts: "cartProducts",
+      cartTotalPrice: "cartTotalPrice",
+      cartTotalItems: "cartTotalItems",
+    }),
+    ...mapGetters("products", {
+      inStock: "inStock",
     }),
   },
 };

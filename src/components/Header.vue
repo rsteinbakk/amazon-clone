@@ -1,52 +1,57 @@
 <template>
   <header class="desktop">
-    <router-link to="/"
-      ><img
-        src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png"
-        class="logo"
-    /></router-link>
+    <router-link to="/">
+      <img src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png" class="logo" />
+    </router-link>
     <div class="search">
       <input type="text" class="searchinput" placeholder="Search Amazon" />
       <div class="searchicon">&nbsp;</div>
     </div>
     <nav>
-      <div><span>Hello guest</span> <span>Sign in</span></div>
-      <div><span>Returns</span> <span>and Orders</span></div>
+      <div>
+        <span>Hello guest</span>
+        <span @click="$emit('doit')">Sign in</span>
+      </div>
+      <div>
+        <span>Returns</span>
+        <span>and Orders</span>
+      </div>
     </nav>
     <div class="cart">
-      <!-- <div>{{ basketlength }}</div> -->
+      <div>{{ cartTotalItems }}</div>
     </div>
   </header>
   <!-- MOBIL: -->
   <header class="mobile">
     <div class="mobile-nav-and-logo">
-      <img
-        src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png"
-        class="logo"
-      />
+      <img src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png" class="logo" />
       <div class="sign-in-cart">
-        <div class="signin-text">Sign in ></div>
-        <div class="signin-icon"><img src="../assets/signin.png" /></div>
-        <!-- <div class="mobile-cart"><div>{{ basketlength }}</div></div> -->
+        <div class="signin-text" @click="$emit('doit')">Sign in ></div>
+        <div class="signin-icon">
+          <img src="../assets/signin.png" />
+        </div>
+        <div class="mobile-cart">
+          <div>{{ cartTotalItems }}</div>
+        </div>
       </div>
     </div>
     <div class="search-mobile">
-      <input
-        type="text"
-        class="searchinput-mobile"
-        placeholder="Search Amazon"
-      />
+      <input type="text" class="searchinput-mobile" placeholder="Search Amazon" />
       <div class="searchicon">&nbsp;</div>
     </div>
   </header>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
+
+  emits: ['doit'],
   computed: {
-    // basketlength() {
-    //   return this.$store.getters.showBasketLength;
-    // },
+
+    ...mapGetters("cart", {
+      cartTotalItems: "cartTotalItems",
+    }),
   },
 };
 </script>

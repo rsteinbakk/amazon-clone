@@ -1,0 +1,243 @@
+<template>
+    <div class="outer-container">
+        <h2>Welcome</h2>
+        <div class="container">
+            <section v-if="createUser">
+                <label class="showpassword" style="margin-bottom: 0;">
+                    <h4 style="margin-left: -5px">
+                        Create account.
+                        <small>New to Amazon?</small>
+                    </h4>
+                    <input type="checkbox" :checked="createUser" @click="changeLoginType" />
+                    <span
+                        class="checkmark"
+                        style="
+    border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
+                    ></span>
+                </label>
+                <input type="text" placeholder="Name" v-model="newUser.fullName"/>
+                <input type="email" placeholder="Mobile number or email"  v-model="newUser.email"/>
+                <input :type="type" placeholder="Create a password"  v-model="newUser.password"/>
+
+                <label class="showpassword">
+                    {{ btnText }}
+                    <input type="checkbox" @click="showPassword" />
+                    <span class="checkmark"></span>
+                </label>
+
+                <button>Continue</button>
+                <div
+                    class="policy"
+                >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
+                <label class="showpassword" style="margin-bottom: 0;">
+                    <h4 style="margin-left: -5px">
+                        Sign-In.
+                        <small>Allready a customer?</small>
+                    </h4>
+                    <input type="checkbox" :checked="!createUser" @click="changeLoginType" />
+                    <span
+                        class="checkmark"
+                        style="
+    border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
+                    ></span>
+                </label>
+            </section>
+            <section v-else>
+                <label class="showpassword" style="margin-bottom: 0;">
+                    <h4 style="margin-left: -5px">
+                        Create account.
+                        <small>New to Amazon?</small>
+                    </h4>
+                    <input type="checkbox" :checked="createUser" @click="changeLoginType" />
+                    <span
+                        class="checkmark"
+                        style="
+    border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
+                    ></span>
+                </label>
+
+                <label class="showpassword" style="margin-bottom: 0;">
+                    <h4 style="margin-left: -5px">
+                        Sign-In.
+                        <small>Allready a customer?</small>
+                    </h4>
+                    <input type="checkbox" :checked="!createUser" @click="changeLoginType" />
+                    <span
+                        class="checkmark"
+                        style="
+    border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
+                    ></span>
+                </label>
+
+                <input type="text" placeholder="Mobile number or email" v-model="loginUsername"/>
+                <input :type="type" placeholder="Password" v-model="loginPassword" />
+                <button>Continue</button>
+                <div
+                    class="policy"
+                >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
+            </section>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        return {
+            type: "password",
+            btnText: "Show password",
+            createUser: false,
+            newUser: {
+                fullName: "",
+                email: "",
+                password: ""
+            },
+            loginUsername: "",
+            loginPassword: ""
+        }
+    },
+    methods: {
+        registerNewUser() {
+
+        },
+        signIn() {
+
+        },
+        changeLoginType() {
+            this.createUser = !this.createUser
+        },
+        showPassword() {
+            if (this.type === 'password') {
+                this.type = 'text'
+            } else {
+                this.type = 'password'
+            }
+        }
+    },
+}
+</script>
+
+<style scoped>
+.policy {
+    margin: 15px 0;
+    font-size: 0.8rem;
+}
+button {
+    all: unset;
+    cursor: pointer;
+    background-image: linear-gradient(rgb(255, 234, 163), rgb(236, 202, 47));
+    padding: 15px;
+    border: 1px solid orange;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 0.95rem;
+    margin: 10px 0 0 0;
+}
+.outer-container {
+    margin: 10px;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 15px;
+    background-color: white;
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 5px;
+}
+section {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    /* flex: 1; */
+    line-height: 15px;
+    margin: 0 0 15px 0;
+    padding: 0;
+    border: 1px solid rgb(180, 180, 180);
+    height: 38px;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 15px;
+    border-radius: 3px;
+    text-indent: 8px;
+    direction: ltr;
+}
+
+/* STYLE CHECKBOX
+ */
+.showpassword {
+    display: block;
+    position: relative;
+    padding-left: 34px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding-top: 4px;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.showpassword input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(245, 167, 0);
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgb(245, 167, 0);
+}
+
+/* On mouse-over, add a grey background color */
+.showpassword:hover input ~ .checkmark {
+    background-color: rgb(248, 248, 248);
+}
+
+/* When the checkbox is checked, add a blue background */
+.showpassword input:checked ~ .checkmark {
+    background-color: #ffffff;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.showpassword input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.showpassword .checkmark:after {
+    left: 6.5px;
+    top: 4px;
+    width: 4px;
+    height: 8px;
+    border: solid rgb(245, 167, 0);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+</style>

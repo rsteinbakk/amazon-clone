@@ -7,9 +7,13 @@ const state = () => ({
 
 // getters
 const getters = {
-    showProducts(state) {
-        return state.all;
-    }
+  showProducts(state) {
+    return state.all;
+  },
+  inStock: (state) => (cartproductid) => {
+    const productid = state.all.find((product) => product.id === cartproductid);
+    return productid.inventory;
+  },
 };
 
 // mutations
@@ -22,15 +26,22 @@ const mutations = {
     const product = state.all.find((product) => product.id === id);
     product.inventory--;
   },
+  incrementProductInventory(state, { id }) {
+    const product = state.all.find((product) => product.id === id);
+    product.inventory++;
+  },
 };
 
 // actions
 const actions = {
-  getAllProducts({ commit }) {
+  getAllProducts(context) {
     shop.getProducts((products) => {
-      commit("setProducts", products);
+      context.commit("setProducts", products);
     });
   },
+  // inStock(context, cartproductid) {
+  //   context.getters("inStock", cartproductid);
+  // },
 };
 
 export default {

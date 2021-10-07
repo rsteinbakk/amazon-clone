@@ -1,32 +1,44 @@
 <template>
-  <Header></Header>
-  <div class="ch"><button @click="checkout = !checkout">CHECKOUT</button></div>
-  <main>
-    <MainProducts v-if="!checkout"></MainProducts>
-    <Basket v-else></Basket>
-  </main>
-  <!-- <div id="nav">
+  <div :class="{ grey: login }">
+    <Header></Header>
+    <div class="ch">
+      <button @click="checkout = !checkout; login = false">CHECKOUT</button>
+    </div>
+    <main>
+      <Login v-if="login"></Login>
+      <MainProducts v-if="!checkout && !login"></MainProducts>
+      <Cart v-if="checkout && !login"></Cart>
+    </main>
+    <!-- <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </div>
-  <router-view/> -->
+    <router-view/>-->
 
-  <!-- https://www.youtube.com/watch?v=RDV3Z1KCBvo 41 min -->
+    <!-- https://www.youtube.com/watch?v=RDV3Z1KCBvo 41 min -->
+  </div>
 </template>
 <script>
 import Header from "./components/Header.vue";
 import MainProducts from "./components/MainProducts.vue";
-import Basket from "./components/Basket.vue";
+import Cart from "./components/Cart.vue";
+import Login from "./components/Login.vue";
 export default {
   components: {
     Header,
     MainProducts,
-    Basket,
+    Cart, Login
   },
   data() {
     return {
       checkout: false,
+      login: true,
     };
+  }, methods: {
+    justDoIt() {
+      console.log("doit");
+    }
+
   },
 };
 </script>
@@ -47,7 +59,12 @@ export default {
     url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.svg#Amazon Ember")
       format("svg");
 }
-
+.grey {
+  /* position: fixed;
+  background-color: rgb(241, 241, 241);
+  width: 100vw;
+  min-height: 100vh; */
+}
 body {
   font-family: "Amazon Ember", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

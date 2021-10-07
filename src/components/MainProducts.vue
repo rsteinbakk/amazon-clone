@@ -10,6 +10,7 @@
   >
     <h2 style="margin-bottom: 0">TODO:</h2>
     <ul>
+      <li>Sjekk inventory når den er full, ikke mulig å legge til flere</li>
       <li>Lage ShowProduct.vue</li>
       <li>Flytte add to cart til ShowProduct.vue</li>
       <li>Lag CheckOut.vue</li>
@@ -52,13 +53,18 @@
           </div>
           <div class="price">
             <small>$</small>{{ product.price }}
-            <span class="instock">In stock</span>
+            <span class="instock">In stock: {{ product.inventory }}</span>
           </div>
           <div class="description">
             {{ product.description }}
           </div>
           <div class="cart">
-            <button @click="addProductToCart(product)">Add to cart</button>
+            <button
+              :disabled="!product.inventory"
+              @click="addProductToCart(product)"
+            >
+              Add to cart
+            </button>
           </div>
         </div>
       </article>
@@ -105,11 +111,8 @@ export default {
       }
     },
     ...mapActions("cart", [
-      ("addProductToCart"), // ->( this.addToBasket())
+      "addProductToCart", // ->( this.addToBasket())
     ]),
-    // addToBasket(product) {
-    //   this.$store.dispatch("addToBasket", { productobject: product });
-    // },
   },
   computed: {
     ...mapGetters("products", [
@@ -133,7 +136,7 @@ export default {
 }
 
 .instock {
-  font-size: 12px;
+  font-size: 10px;
   margin-left: 5px;
   color: grey;
 }
