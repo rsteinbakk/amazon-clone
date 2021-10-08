@@ -9,8 +9,10 @@
     </div>
     <nav>
       <router-link to="/signin" class="signitin">
-        <span>Hello guest</span>
-        <span @click="$emit('doit')">Sign in</span>
+        <span v-if="!getUser">Hello guest</span>
+        <span v-if="getUser">Hello {{getUser.displayName}} </span>
+        <span v-if="!getUser">Sign in</span>
+        <span v-if="getUser">Go to account</span>
       </router-link>
       <div>
         <span>Returns</span>
@@ -28,10 +30,11 @@
         <img src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png" class="logo" />
       </router-link>
       <div class="sign-in-cart">
-        <router-link to="/signin" class="signin-text" @click="$emit('doit')">Sign in ></router-link>
-        <div class="signin-icon">
+        <router-link to="/signin" class="signin-text" v-if="getUser">Hello, {{getUser.displayName}} ></router-link>
+        <router-link to="/signin" class="signin-text" v-else>Sign in ></router-link>
+        <router-link to="/signin" class="signin-icon">
           <img src="../assets/signin.png" />
-        </div>
+        </router-link>
         <router-link to="/cart" class="mobile-cart" style="text-decoration: none;">
           <div>{{ cartTotalItems }}</div>
         </router-link>
@@ -48,12 +51,12 @@
 import { mapGetters } from "vuex";
 export default {
 
-  emits: ['doit'],
   computed: {
 
     ...mapGetters("cart", {
       cartTotalItems: "cartTotalItems",
     }),
+    ...mapGetters("auth", ['getUser', 'isUserAuth'])
   },
 };
 </script>
@@ -220,7 +223,8 @@ nav div span:first-child {
   line-height: 14px;
   height: 14px;
   font-weight: 400;
-}nav .signitin {
+}
+nav .signitin {
   display: flex;
   flex-direction: column;
   margin: 0 10px;

@@ -1,16 +1,27 @@
 <template>
-    {{ getUser }}
-    {{ isUserAuth }}
-    <div class="outer-" v-if="isUserAuth">
+    <h2 style="text-align: center">
+        Welcome
+        <span v-if="getUser"></span>
+    </h2>
+    <div class="outer-container" v-if="isUserAuth">
         <div>
-            <h2>Welcome</h2>
-            <div class="container" style="padding: 15px">
+            <div class="container" style="padding: 15px; min-width: 290px">
                 <div class="signed-in" style="display: flex; flex-direction: column">
-                    Hello UserName,
-                    <p>You are signed in.</p>
-                    <button style="margin: 15px 0">Continue shopping</button>
-                    <button style="margin: 5px 0 20px 0">Sign out</button>
+                    <p>
+                        Nice to see you,
+                        <b>{{ getUser.displayName }}</b>.
+                        <br />Your e-mail:
+                        <b>{{ getUser.email }}</b>
+                    </p>
+                    <p style="text-align:center">What do you want to do today?</p>
+                    <router-link to="/" style="all:unset; display: flex; flex-direction: column;">
+                        <button style="margin: 15px 0">Continue shopping</button>
+                    </router-link>
+                    <button style="margin: 5px 0 15px 0" @click="signOutAction">Sign out</button>
+                        <a style="margin: 5px 0 20px 0; cursor: pointer; color: rgb(0, 93, 180)" @click="deleteUser">Delete user</a>
                 </div>
+                <!-- <h4>Change profile info</h4>
+                <label for="">Name: </label><input type="text" placeholder="Change name" v-model="getUser.displayName">-->
             </div>
             <br />
         </div>
@@ -35,7 +46,7 @@
                 </label>
             </div>
             <section v-if="createUser">
-                <!-- <input type="text" placeholder="Name" v-model="newUser.fullName" /> -->
+                <input type="text" placeholder="Name" v-model="newUser.fullName" />
                 <!-- <input type="email" placeholder="Mobile number or email" v-model="newUser.email" /> -->
                 <input type="email" placeholder="E-mail" v-model="newUser.email" />
                 <input :type="type" placeholder="Create a password" v-model="newUser.password" />
@@ -93,7 +104,7 @@
 
                 <input type="text" placeholder="Login e-mail" v-model="loginUsername" />
                 <input :type="type" placeholder="Login password" v-model="loginPassword" />
-                <button>Continue</button>
+                <button @click="signIn">Continue</button>
                 <div
                     class="policy"
                 >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
@@ -151,7 +162,10 @@ export default {
         },
         signUp() {
 
-            this.signUpAction({ email: this.newUser.email, password: this.newUser.password });
+            this.signUpAction({ displayName: this.newUser.fullName, email: this.newUser.email, password: this.newUser.password });
+        },
+        signOut() {
+            this.signOutAction();
         },
         changeLoginType() {
             this.createUser = !this.createUser
@@ -162,11 +176,12 @@ export default {
             } else {
                 this.type = 'password'
             }
+        }, signIn() {
+            console.log("signinstart");
+            this.signInAction({ email: this.loginUsername, password: this.loginPassword });
         },
-        ...mapActions(["signUpAction"]),
+        ...mapActions("auth", ["signUpAction", "signOutAction", "signInAction", "deleteUser"]),
     }, computed: {
-
-
         ...mapGetters("auth", ['getUser', 'isUserAuth'])
     }
 }

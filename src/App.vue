@@ -14,6 +14,7 @@
 </template>
 <script>
 import Header from "./components/Header.vue";
+import { mapActions } from "vuex";
 // import MainProducts from "./components/MainProducts.vue";
 // import Cart from "./components/Cart.vue";
 // import Login from "./components/Login.vue";
@@ -31,7 +32,8 @@ export default {
   }, methods: {
     justDoIt() {
       console.log("doit");
-    }
+    },
+    ...mapActions("auth", ["authAction"])
 
   }, computed: {
     signInTrue() {
@@ -43,7 +45,9 @@ export default {
         return false;
       }
     }
-  },
+  }, mounted() {
+    this.authAction();
+  }
 };
 </script>
 
