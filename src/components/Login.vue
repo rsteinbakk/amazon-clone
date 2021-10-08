@@ -1,8 +1,19 @@
 <template>
     <div class="outer-container">
-        <h2>Welcome</h2>
-        <div class="container">
-            <section v-if="createUser">
+        <div v-if="signedIn">
+            <h2>Welcome</h2>
+            <div class="container" style="padding: 15px">
+                <div class="signed-in" style="display: flex; flex-direction: column">
+                    Hello UserName,
+                    <p>You are signed in.</p>
+                    <button style="margin: 15px 0">Continue shopping</button>
+                    <button style="margin: 5px 0 20px 0">Sign out</button>
+                </div>
+            </div>
+            <br />
+        </div>
+        <div class="container" v-else>
+            <div :class="{ signintab: !createUser }" style="padding: 0 15px;">
                 <label class="showpassword" style="margin-bottom: 0;">
                     <h4 style="margin-left: -5px">
                         Create account.
@@ -15,9 +26,12 @@
     border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
                     ></span>
                 </label>
-                <input type="text" placeholder="Name" v-model="newUser.fullName"/>
-                <input type="email" placeholder="Mobile number or email"  v-model="newUser.email"/>
-                <input :type="type" placeholder="Create a password"  v-model="newUser.password"/>
+            </div>
+            <section v-if="createUser">
+                <!-- <input type="text" placeholder="Name" v-model="newUser.fullName" /> -->
+                <!-- <input type="email" placeholder="Mobile number or email" v-model="newUser.email" /> -->
+                <input type="email" placeholder="E-mail" v-model="newUser.email" />
+                <input :type="type" placeholder="Create a password" v-model="newUser.password" />
 
                 <label class="showpassword">
                     {{ btnText }}
@@ -25,7 +39,7 @@
                     <span class="checkmark"></span>
                 </label>
 
-                <button>Continue</button>
+                <button @click="registerNewUser">Continue</button>
                 <div
                     class="policy"
                 >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
@@ -43,7 +57,7 @@
                 </label>
             </section>
             <section v-else>
-                <label class="showpassword" style="margin-bottom: 0;">
+                <!-- <label class="showpassword" style="margin-bottom: 0;">
                     <h4 style="margin-left: -5px">
                         Create account.
                         <small>New to Amazon?</small>
@@ -54,9 +68,8 @@
                         style="
     border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
                     ></span>
-                </label>
-
-                <label class="showpassword" style="margin-bottom: 0;">
+                </label>-->
+                <label class="showpassword" style="margin-bottom: 0;  padding-top: 0">
                     <h4 style="margin-left: -5px">
                         Sign-In.
                         <small>Allready a customer?</small>
@@ -69,8 +82,8 @@
                     ></span>
                 </label>
 
-                <input type="text" placeholder="Mobile number or email" v-model="loginUsername"/>
-                <input :type="type" placeholder="Password" v-model="loginPassword" />
+                <input type="text" placeholder="Login e-mail" v-model="loginUsername" />
+                <input :type="type" placeholder="Login password" v-model="loginPassword" />
                 <button>Continue</button>
                 <div
                     class="policy"
@@ -81,6 +94,9 @@
 </template>
 
 <script>
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { mapState } from "vuex";
+
 export default {
     data() {
         return {
@@ -98,7 +114,24 @@ export default {
     },
     methods: {
         registerNewUser() {
-
+            console.log('register-new-user-start');
+            const email = this.newUser.email;
+            const password = this.newUser.password
+            const auth = getAuth();
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log(user);
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.warn(errorCode);
+                    console.warn(errorMessage);
+                    // ..
+                });
         },
         signIn() {
 
@@ -113,6 +146,11 @@ export default {
                 this.type = 'password'
             }
         }
+    }, computed: {
+
+        ...mapState({
+            signedIn: (state) => state.auth.auth,
+        }),
     },
 }
 </script>
@@ -134,21 +172,35 @@ button {
     margin: 10px 0 0 0;
 }
 .outer-container {
+    display: flex;
+    justify-content: center;
     margin: 10px;
+}
+.signintab {
+    background-color: rgb(247, 247, 247);
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+.logintab {
+    background-color: rgb(247, 247, 247);
+    margin-top: 10px;
+    border-top: 1px solid rgb(221, 221, 221);
 }
 .container {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 0 15px;
+    padding: 0;
     background-color: white;
     border: 1px solid rgb(221, 221, 221);
     border-radius: 5px;
+    max-width: 450px;
 }
 section {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    padding: 0 15px;
 }
 input[type="text"],
 input[type="email"],

@@ -1,5 +1,6 @@
 import cart from "./modules/cart.js";
 import products from "./modules/products.js"
+import auth from "./modules/auth.js"
 // import createLogger from "./pluginutils/logger.js";
 import { createStore } from "vuex";
 
@@ -9,6 +10,7 @@ export default createStore({
   modules: {
     cart,
     products,
+    auth
   },
   strict: debug,
 //   plugins: debug ? [createLogger()] : [],
