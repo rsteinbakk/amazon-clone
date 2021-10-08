@@ -1,6 +1,8 @@
 <template>
-    <div class="outer-container">
-        <div v-if="signedIn">
+    {{ getUser }}
+    {{ isUserAuth }}
+    <div class="outer-" v-if="isUserAuth">
+        <div>
             <h2>Welcome</h2>
             <div class="container" style="padding: 15px">
                 <div class="signed-in" style="display: flex; flex-direction: column">
@@ -12,8 +14,13 @@
             </div>
             <br />
         </div>
-        <div class="container" v-else>
-            <div :class="{ signintab: !createUser }" style="padding: 0 15px;">
+    </div>
+    <div class="outer-container" v-else>
+        <div class="container">
+            <div
+                :class="{ signintab: !createUser }"
+                style="padding: 0 15px; border-radius: 5px 5px 0 0"
+            >
                 <label class="showpassword" style="margin-bottom: 0;">
                     <h4 style="margin-left: -5px">
                         Create account.
@@ -38,7 +45,9 @@
                     <input type="checkbox" @click="showPassword" />
                     <span class="checkmark"></span>
                 </label>
-
+                <div v-for="error in validationErrors" :key="error">
+                    <span v-html="error"></span>
+                </div>
                 <button @click="registerNewUser">Continue</button>
                 <div
                     class="policy"
@@ -94,8 +103,7 @@
 </template>
 
 <script>
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { mapState } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
     data() {
@@ -104,37 +112,46 @@ export default {
             btnText: "Show password",
             createUser: false,
             newUser: {
-                fullName: "",
-                email: "",
-                password: ""
+                fullName: null,
+                email: null,
+                password: null
             },
-            loginUsername: "",
-            loginPassword: ""
+            loginUsername: null,
+            loginPassword: null,
+            validationErrors: []
         }
     },
     methods: {
-        registerNewUser() {
-            console.log('register-new-user-start');
-            const email = this.newUser.email;
-            const password = this.newUser.password
-            const auth = getAuth();
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-                    console.log(user);
-                    // ...
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.warn(errorCode);
-                    console.warn(errorMessage);
-                    // ..
-                });
-        },
-        signIn() {
 
+        registerNewUser() {
+            this.validationErrors = [];
+            if (!this.newUser.email) {
+                this.validationErrors.push("<strong>E-mail</strong> cannot be empty.");
+            }
+            if (/.+@.+/.test(this.newUser.email) != true) {
+                this.validationErrors.push("<strong>E-mail</strong> must be valid.");
+            }
+            // password validation
+            if (!this.newUser.password) {
+                this.validationErrors.push("<strong>Password</strong> cannot be empty.");
+            }
+            if (/.{4,}/.test(this.newUser.password) != true) {
+                this.validationErrors.push(
+                    "<strong>Password</strong> must be at least 4 characters long."
+                );
+            }
+            if (!(this.password === this.passwordRepeat)) {
+                this.validationErrors.push("<strong>Passwords</strong> did not match.");
+            }
+
+            // when valid then sign in
+            if (this.validationErrors.length <= 0) {
+                this.signUp();
+            }
+        },
+        signUp() {
+
+            this.signUpAction({ email: this.newUser.email, password: this.newUser.password });
         },
         changeLoginType() {
             this.createUser = !this.createUser
@@ -145,13 +162,13 @@ export default {
             } else {
                 this.type = 'password'
             }
-        }
+        },
+        ...mapActions(["signUpAction"]),
     }, computed: {
 
-        ...mapState({
-            signedIn: (state) => state.auth.auth,
-        }),
-    },
+
+        ...mapGetters("auth", ['getUser', 'isUserAuth'])
+    }
 }
 </script>
 

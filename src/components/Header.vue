@@ -8,31 +8,33 @@
       <div class="searchicon">&nbsp;</div>
     </div>
     <nav>
-      <div>
+      <router-link to="/signin" class="signitin">
         <span>Hello guest</span>
         <span @click="$emit('doit')">Sign in</span>
-      </div>
+      </router-link>
       <div>
         <span>Returns</span>
         <span>and Orders</span>
       </div>
     </nav>
-    <div class="cart">
+    <router-link to="/cart" class="cart" style="text-decoration: none">
       <div>{{ cartTotalItems }}</div>
-    </div>
+    </router-link>
   </header>
   <!-- MOBIL: -->
   <header class="mobile">
     <div class="mobile-nav-and-logo">
-      <img src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png" class="logo" />
+      <router-link to="/" style="padding-top: 5px">
+        <img src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png" class="logo" />
+      </router-link>
       <div class="sign-in-cart">
-        <div class="signin-text" @click="$emit('doit')">Sign in ></div>
+        <router-link to="/signin" class="signin-text" @click="$emit('doit')">Sign in ></router-link>
         <div class="signin-icon">
           <img src="../assets/signin.png" />
         </div>
-        <div class="mobile-cart">
+        <router-link to="/cart" class="mobile-cart" style="text-decoration: none;">
           <div>{{ cartTotalItems }}</div>
-        </div>
+        </router-link>
       </div>
     </div>
     <div class="search-mobile">
@@ -78,6 +80,7 @@ export default {
   font-size: 12px;
   letter-spacing: 0.03rem;
   font-weight: 100;
+  text-decoration: none;
 }
 .signin-icon img {
   width: 30px;
@@ -213,6 +216,21 @@ nav div {
   font-weight: 700;
 }
 nav div span:first-child {
+  font-size: 12px;
+  line-height: 14px;
+  height: 14px;
+  font-weight: 400;
+}nav .signitin {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+  font-size: 14px;
+  line-height: 15px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+}
+nav .signitin span:first-child {
   font-size: 12px;
   line-height: 14px;
   height: 14px;

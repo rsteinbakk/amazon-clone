@@ -1,19 +1,12 @@
 <template>
-  <div :class="{ grey: login }">
-    <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <div :class="{ grey: signInTrue }">
+    <div id="nav"></div>
     <Header></Header>
-    <div class="ch">
-      <button @click="checkout = !checkout; login = false">CHECKOUT</button>
-    </div>
     <main>
-      
-    <router-view/>
+      <router-view />
       <!-- <Login v-if="login"></Login>
       <MainProducts v-if="!checkout && !login"></MainProducts>
-      <Cart v-if="checkout && !login"></Cart> -->
+      <Cart v-if="checkout && !login"></Cart>-->
     </main>
 
     <!-- https://www.youtube.com/watch?v=RDV3Z1KCBvo 41 min -->
@@ -40,6 +33,16 @@ export default {
       console.log("doit");
     }
 
+  }, computed: {
+    signInTrue() {
+      if (this.$route.name === "Sign in") {
+        document.body.style.backgroundColor = "#EFEFEF";
+        return true;
+      } else {
+        document.body.style.backgroundColor = "#FFF";
+        return false;
+      }
+    }
   },
 };
 </script>
@@ -60,27 +63,17 @@ export default {
     url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.svg#Amazon Ember")
       format("svg");
 }
-/* .grey {
-  position: fixed;
-  background-color: rgb(241, 241, 241);
-  width: 100vw;
-  min-height: 100vh;
-} */
 body {
   font-family: "Amazon Ember", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
-}
-
-.ch {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: -19px;
+  min-height: 100vh;
+  /* background-color: rgb(206, 206, 206); */
 }
 main {
-  padding: 2px 13px;
+  padding: 10px 13px;
 }
 button {
   all: unset;
