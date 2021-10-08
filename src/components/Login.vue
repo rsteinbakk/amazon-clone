@@ -1,83 +1,90 @@
 <template>
-    <h2 style="text-align: center">
-        Welcome
-        <span v-if="getUser"></span>
-    </h2>
-    <div class="outer-container" v-if="isUserAuth">
-        <div>
-            <div class="container" style="padding: 15px; min-width: 290px">
-                <div class="signed-in" style="display: flex; flex-direction: column">
-                    <p>
-                        Nice to see you,
-                        <b>{{ getUser.displayName }}</b>.
-                        <br />Your e-mail:
-                        <b>{{ getUser.email }}</b>
-                    </p>
-                    <p style="text-align:center">What do you want to do today?</p>
-                    <router-link to="/" style="all:unset; display: flex; flex-direction: column;">
-                        <button style="margin: 15px 0">Continue shopping</button>
-                    </router-link>
-                    <button style="margin: 5px 0 15px 0" @click="signOutAction">Sign out</button>
-                        <a style="margin: 5px 0 20px 0; cursor: pointer; color: rgb(0, 93, 180)" @click="deleteUser">Delete user</a>
+    <div>
+        <h2 style="text-align: center">
+            Welcome
+            <span v-if="getUser"></span>
+        </h2>
+        <div class="outer-container" v-if="isUserAuth">
+            <div>
+                <div class="container" style="padding: 15px; min-width: 290px">
+                    <div class="signed-in" style="display: flex; flex-direction: column">
+                        <p>
+                            Nice to see you,
+                            <b>{{ getUser.displayName }}</b>.
+                            <br />Your e-mail:
+                            <b>{{ getUser.email }}</b>
+                        </p>
+                        <p style="text-align:center">What do you want to do today?</p>
+                        <router-link
+                            to="/"
+                            style="all:unset; display: flex; flex-direction: column;"
+                        >
+                            <button style="margin: 15px 0">Continue shopping</button>
+                        </router-link>
+                        <button style="margin: 5px 0 15px 0" @click="signOutAction">Sign out</button>
+                        <a
+                            style="margin: 5px 0 20px 0; cursor: pointer; color: rgb(0, 93, 180)"
+                            @click="deleteUser"
+                        >Delete user</a>
+                    </div>
+                    <!-- <h4>Change profile info</h4>
+                    <label for="">Name: </label><input type="text" placeholder="Change name" v-model="getUser.displayName">-->
                 </div>
-                <!-- <h4>Change profile info</h4>
-                <label for="">Name: </label><input type="text" placeholder="Change name" v-model="getUser.displayName">-->
+                <br />
             </div>
-            <br />
         </div>
-    </div>
-    <div class="outer-container" v-else>
-        <div class="container">
-            <div
-                :class="{ signintab: !createUser }"
-                style="padding: 0 15px; border-radius: 5px 5px 0 0"
-            >
-                <label class="showpassword" style="margin-bottom: 0;">
-                    <h4 style="margin-left: -5px">
-                        Create account.
-                        <small>New to Amazon?</small>
-                    </h4>
-                    <input type="checkbox" :checked="createUser" @click="changeLoginType" />
-                    <span
-                        class="checkmark"
-                        style="
+        <div class="outer-container" v-else>
+            <div class="container">
+                <div
+                    :class="{ signintab: !createUser }"
+                    style="padding: 0 15px; border-radius: 5px 5px 0 0"
+                >
+                    <label class="showpassword" style="margin-bottom: 0;">
+                        <h4 style="margin-left: -5px">
+                            Create account.
+                            <small>New to Amazon?</small>
+                        </h4>
+                        <input type="checkbox" :checked="createUser" @click="changeLoginType" />
+                        <span
+                            class="checkmark"
+                            style="
     border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
-                    ></span>
-                </label>
-            </div>
-            <section v-if="createUser">
-                <input type="text" placeholder="Name" v-model="newUser.fullName" />
-                <!-- <input type="email" placeholder="Mobile number or email" v-model="newUser.email" /> -->
-                <input type="email" placeholder="E-mail" v-model="newUser.email" />
-                <input :type="type" placeholder="Create a password" v-model="newUser.password" />
-
-                <label class="showpassword">
-                    {{ btnText }}
-                    <input type="checkbox" @click="showPassword" />
-                    <span class="checkmark"></span>
-                </label>
-                <div v-for="error in validationErrors" :key="error">
-                    <span v-html="error"></span>
+                        ></span>
+                    </label>
                 </div>
-                <button @click="registerNewUser">Continue</button>
-                <div
-                    class="policy"
-                >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
-                <label class="showpassword" style="margin-bottom: 0;">
-                    <h4 style="margin-left: -5px">
-                        Sign-In.
-                        <small>Allready a customer?</small>
-                    </h4>
-                    <input type="checkbox" :checked="!createUser" @click="changeLoginType" />
-                    <span
-                        class="checkmark"
-                        style="
+                <section v-if="createUser">
+                    <input type="text" placeholder="Name" v-model="newUser.fullName" />
+                    <!-- <input type="email" placeholder="Mobile number or email" v-model="newUser.email" /> -->
+                    <input type="email" placeholder="E-mail" v-model="newUser.email" />
+                    <input :type="type" placeholder="Create a password" v-model="newUser.password" />
+
+                    <label class="showpassword">
+                        {{ btnText }}
+                        <input type="checkbox" @click="showPassword" />
+                        <span class="checkmark"></span>
+                    </label>
+                    <div v-for="error in validationErrors" :key="error">
+                        <span v-html="error"></span>
+                    </div>
+                    <button @click="registerNewUser">Continue</button>
+                    <div
+                        class="policy"
+                    >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
+                    <label class="showpassword" style="margin-bottom: 0;">
+                        <h4 style="margin-left: -5px">
+                            Sign-In.
+                            <small>Allready a customer?</small>
+                        </h4>
+                        <input type="checkbox" :checked="!createUser" @click="changeLoginType" />
+                        <span
+                            class="checkmark"
+                            style="
     border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
-                    ></span>
-                </label>
-            </section>
-            <section v-else>
-                <!-- <label class="showpassword" style="margin-bottom: 0;">
+                        ></span>
+                    </label>
+                </section>
+                <section v-else>
+                    <!-- <label class="showpassword" style="margin-bottom: 0;">
                     <h4 style="margin-left: -5px">
                         Create account.
                         <small>New to Amazon?</small>
@@ -88,27 +95,28 @@
                         style="
     border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
                     ></span>
-                </label>-->
-                <label class="showpassword" style="margin-bottom: 0;  padding-top: 0">
-                    <h4 style="margin-left: -5px">
-                        Sign-In.
-                        <small>Allready a customer?</small>
-                    </h4>
-                    <input type="checkbox" :checked="!createUser" @click="changeLoginType" />
-                    <span
-                        class="checkmark"
-                        style="
+                    </label>-->
+                    <label class="showpassword" style="margin-bottom: 0;  padding-top: 0">
+                        <h4 style="margin-left: -5px">
+                            Sign-In.
+                            <small>Allready a customer?</small>
+                        </h4>
+                        <input type="checkbox" :checked="!createUser" @click="changeLoginType" />
+                        <span
+                            class="checkmark"
+                            style="
     border-radius: 50%; margin-top: 20px;; transform: scale(0.8)"
-                    ></span>
-                </label>
+                        ></span>
+                    </label>
 
-                <input type="text" placeholder="Login e-mail" v-model="loginUsername" />
-                <input :type="type" placeholder="Login password" v-model="loginPassword" />
-                <button @click="signIn">Continue</button>
-                <div
-                    class="policy"
-                >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
-            </section>
+                    <input type="text" placeholder="Login e-mail" v-model="loginUsername" />
+                    <input :type="type" placeholder="Login password" v-model="loginPassword" />
+                    <button @click="signIn">Continue</button>
+                    <div
+                        class="policy"
+                    >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
+                </section>
+            </div>
         </div>
     </div>
 </template>

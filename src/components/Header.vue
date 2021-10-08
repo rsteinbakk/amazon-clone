@@ -10,7 +10,7 @@
     <nav>
       <router-link to="/signin" class="signitin">
         <span v-if="!getUser">Hello guest</span>
-        <span v-if="getUser">Hello {{getUser.displayName}} </span>
+        <span v-if="getUser">Hello {{ getUser.displayName }}</span>
         <span v-if="!getUser">Sign in</span>
         <span v-if="getUser">Go to account</span>
       </router-link>
@@ -30,7 +30,11 @@
         <img src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png" class="logo" />
       </router-link>
       <div class="sign-in-cart">
-        <router-link to="/signin" class="signin-text" v-if="getUser">Hello, {{getUser.displayName}} ></router-link>
+        <router-link
+          to="/signin"
+          class="signin-text"
+          v-if="getUser"
+        >Hello, {{ getUser.displayName }} ></router-link>
         <router-link to="/signin" class="signin-text" v-else>Sign in ></router-link>
         <router-link to="/signin" class="signin-icon">
           <img src="../assets/signin.png" />
@@ -50,7 +54,19 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-
+  watch: {
+    getUser() {
+      if (this.getUser) {
+        this.$toast.info('Signed in.', {
+          // optional options Object
+        })
+      } else {
+        this.$toast.info('Signed out.', {
+          // optional options Object
+        })
+      }
+    }
+  },
   computed: {
 
     ...mapGetters("cart", {

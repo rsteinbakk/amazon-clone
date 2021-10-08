@@ -1,25 +1,23 @@
 <template>
-  <div
-    style="
+  <div>
+    <div
+      style="
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       padding: 10px;
     "
-  >
-    <h2 style="margin-bottom: 0">TODO:</h2>
-    <ul>
-      <li>Sjekk inventory når den er full, ikke mulig å legge til flere</li>
-      <li>Lage ShowProduct.vue</li>
-      <li>Flytte add to cart til ShowProduct.vue</li>
-      <li>Lag CheckOut.vue</li>
-      <li>yt 1:46</li>
-    </ul>
-  </div>
-  <div class="container">
-    <div class="mobilecontainer">
-      <!-- <article class="mobile">
+    >
+      <ul>
+        <li>Sjekk inventory når den er full, ikke mulig å legge til flere</li>
+        <li>Lage ShowProduct.vue</li>
+        <li>Lag CheckOut.vue</li>
+      </ul>
+    </div>
+    <div class="container">
+      <div class="mobilecontainer">
+        <!-- <article class="mobile">
         <div>
           <img src="../assets/prodimg/sweater.jpg" class="mainimg" />
         </div>
@@ -35,39 +33,32 @@
             the collar, hem, and cuffs to keep you warm
           </div>
         </div>
-      </article> -->
+        </article>-->
 
-      <article
-        class="mobile"
-        v-for="(product, index) in showProducts"
-        :key="index"
-      >
-        <div>
-          <img :src="product.image" class="mainimg" />
-        </div>
-        <div class="mobile-products-description">
-          <h4>{{ product.title }}</h4>
-          <div class="stars">
-            <img :src="checkStarCount(product.rating.rate)" class="star" />
-            <div class="starcount">{{ product.rating.rate }}</div>
+        <article class="mobile" v-for="(product, index) in showProducts" :key="index">
+          <div>
+            <img :src="product.image" class="mainimg" />
           </div>
-          <div class="price">
-            <small>$</small>{{ product.price }}
-            <span class="instock">In stock: {{ product.inventory }}</span>
+          <div class="mobile-products-description">
+            <h4>{{ product.title }}</h4>
+            <div class="stars">
+              <img :src="checkStarCount(product.rating.rate)" class="star" />
+              <div class="starcount">{{ product.rating.rate }}</div>
+            </div>
+            <div class="price">
+              <small>$</small>
+              {{ product.price.toFixed(2) }}
+              <span
+                class="instock"
+              >In stock: {{ product.inventory }}</span>
+            </div>
+            <div class="description">{{ product.description }}</div>
+            <div class="cart">
+              <button :disabled="!product.inventory" @click="addProductToCart(product)">Add to cart</button>
+            </div>
           </div>
-          <div class="description">
-            {{ product.description }}
-          </div>
-          <div class="cart">
-            <button
-              :disabled="!product.inventory"
-              @click="addProductToCart(product)"
-            >
-              Add to cart
-            </button>
-          </div>
-        </div>
-      </article>
+        </article>
+      </div>
     </div>
   </div>
 </template>
@@ -114,9 +105,25 @@ export default {
       "addProductToCart", // ->( this.addToBasket())
     ]),
   },
+  watch: {
+    cartTotalItems() {
+      const model = this;
+      if (this.cartTotalItems) {
+        model.$toast.success('Item added. Go to cart.', {
+          onClick: function () {
+            model.$router.push('cart')
+          },
+          position: "bottom",
+        })
+      }
+    }
+  },
   computed: {
     ...mapGetters("products", [
       "showProducts", // -> this.showProducts
+    ]),
+    ...mapGetters("cart", [
+      "cartTotalItems",
     ]),
   },
   created() {

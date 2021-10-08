@@ -2,8 +2,13 @@
   <div :class="{ grey: signInTrue }">
     <div id="nav"></div>
     <Header></Header>
+    <!-- https://github.com/ankurk91/vue-toast-notification -->
     <main>
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="fade">
+          <component :is="Component" />
+        </transition>
+      </router-view>
       <!-- <Login v-if="login"></Login>
       <MainProducts v-if="!checkout && !login"></MainProducts>
       <Cart v-if="checkout && !login"></Cart>-->
@@ -20,7 +25,7 @@ import { mapActions } from "vuex";
 // import Login from "./components/Login.vue";
 export default {
   components: {
-    Header,
+    Header
     // MainProducts,
     // Cart, Login
   },
@@ -30,9 +35,7 @@ export default {
       login: false,
     };
   }, methods: {
-    justDoIt() {
-      console.log("doit");
-    },
+
     ...mapActions("auth", ["authAction"])
 
   }, computed: {
@@ -55,17 +58,7 @@ export default {
 @import url(//db.onlinewebfonts.com/c/157c6cc36dd65b1b2adc9e7f3329c761?family=Amazon+Ember);
 @font-face {
   font-family: "Amazon Ember";
-  src: url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.eot");
-  src: url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.eot?#iefix")
-      format("embedded-opentype"),
-    url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.woff2")
-      format("woff2"),
-    url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.woff")
-      format("woff"),
-    url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.ttf")
-      format("truetype"),
-    url("//db.onlinewebfonts.com/t/157c6cc36dd65b1b2adc9e7f3329c761.svg#Amazon Ember")
-      format("svg");
+  src: url("./fonts/AmazonEmberDisplay_Rg.ttf") format("truetype");
 }
 body {
   font-family: "Amazon Ember", Helvetica, Arial, sans-serif;
@@ -105,4 +98,15 @@ button {
 #nav a.router-link-exact-active {
   color: #42b983;
 } */
+
+/* transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.7s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

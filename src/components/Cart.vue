@@ -1,47 +1,78 @@
 <template>
   <!-- <small>{{ products }}</small> -->
-  <div class="checkout-container">
-    <h3>
-      <span class="not-bold">Subtotal</span>
-      <span class="super">$</span>
-      {{ cartTotalPrice }}
-      <span class="super">59</span>
-    </h3>
-    <button class="checkout">Proceed to checkout ({{ this.cartTotalItems }} items)</button>
-  </div>
-
-  <div class="mobilecontainer" v-for="(item, index) in cartProducts" :key="index">
-    <article class="mobile">
-      <div>
-        <img :src="item.image" class="mainimg" />
+  <div>
+    <div class="checkout-container" v-if="cartTotalItems > 0">
+      <div class="loggedin" v-if="getUser">
+        <p>
+          Nice to see you,
+          <b>{{ getUser.displayName }}</b>.
+        </p>
       </div>
-      <div class="mobile-products-description">
-        <h4>{{ item.title }}</h4>
-        <div class="price">
-          <small>$</small>
-          {{ item.price }}
-        </div>
-        <div class="instock">In Stock</div>
-        <!-- <div class="instock" v-if="inStock(item.id) !== 0">In stock ({{ inStock(item.id) }})</div>
-        <div class="instock" style="color:red;" v-else>Out of stock</div> -->
-      </div>
-    </article>
-
-    <div class="cartnumber">
-      <button @click="decrementCartItem(item)">-</button>
-      <input type="number" :value="item.quantity" />
-      <button :disabled="inStock(item.id) == 0" @click="addProductToCart(item)">+</button>
+      <h3>
+        <span class="not-bold">Subtotal</span>
+        ${{ cartTotalPrice.toFixed(2) }}
+      </h3>
+      <button class="checkout">Proceed to checkout ({{ this.cartTotalItems }} items)</button>
     </div>
-    <button class="whitebutton" @click="removeProductFromCart(item)">Delete</button>
-  </div>
-  <div class="checkout-container">
-    <button class="checkout" style="margin-top: 30px">Continue shopping</button>
+    <div class="checkout-container" v-else>
+      <p></p>The shopping cart is empty.
+    </div>
+    <transition-group name="slide-fade">
+      <div class="mobilecontainer" v-for="(item) in cartProducts" :key="item.id">
+        <div v-if="item > 1">{{ cartProducts[0] }}</div>
+        <article class="mobile">
+          <div>
+            <img :src="item.image" class="mainimg" />
+          </div>
+          <div class="mobile-products-description">
+            <h4>{{ item.title }}</h4>
+            <div class="price">
+              <small>$</small>
+              {{ item.price.toFixed(2) }}
+            </div>
+            <div class="instock">In Stock</div>
+            <!-- <div class="instock" v-if="inStock(item.id) !== 0">In stock ({{ inStock(item.id) }})</div>
+            <div class="instock" style="color:red;" v-else>Out of stock</div>-->
+          </div>
+        </article>
+
+        <div class="cartnumber">
+          <button @click="decrementCartItem(item)">-</button>
+          <input type="number" :value="item.quantity" />
+          <button :disabled="inStock(item.id) == 0" @click="addProductToCart(item)">+</button>
+        </div>
+        <button class="whitebutton" @click="removeProductFromCart(item)">Delete</button>
+      </div>
+    </transition-group>
+    <div class="checkout-container">
+      <div
+        style="width: 300px; 
+  border-top: 1px solid rgb(221, 221, 221); height: 32px; margin-top: 20px"
+        v-if="cartTotalItems.length"
+      >&nbsp;</div>
+
+      <h3 v-if="cartTotalItems > 1">
+        <span class="not-bold">Subtotal</span>
+        ${{ cartTotalPrice.toFixed(2) }}
+      </h3>
+      <button
+        class="checkout"
+        v-if="cartTotalItems > 1"
+      >Proceed to checkout ({{ this.cartTotalItems }} items)</button>
+      <router-link to="/" style="all:unset">
+        <button class="checkout" style="margin-top: 30px; ">Continue shopping</button>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from "vuex";
 export default {
+  data() {
+    return {
+    }
+  },
   methods: {
     // inStock(id) {
     //   this.$store.dispatch("products/inStock", { id: id });
@@ -85,6 +116,8 @@ export default {
     ...mapGetters("products", {
       inStock: "inStock",
     }),
+    ...mapGetters("auth", ['getUser', 'isUserAuth'])
+
   },
 };
 </script>
@@ -141,6 +174,8 @@ h3 {
 }
 .checkout {
   padding: 9px 30px;
+  min-width: 220px;
+  text-align: center;
 }
 .super {
   font-size: 0.63em;
@@ -171,11 +206,7 @@ h3 {
   flex-direction: column;
   align-items: center;
 }
-.mobilecontainer {
-  border-bottom: 1px solid rgb(221, 221, 221);
-}
 .mobile {
-  border-top: 1px solid rgb(221, 221, 221);
   border-radius: 3px;
   margin-top: 10px;
   margin-bottom: 15px;
@@ -183,6 +214,9 @@ h3 {
   padding-right: 5px;
   display: flex;
   flex-direction: row;
+}
+:not(.mobile:first-child) > .mobile {
+  border-top: 1px solid rgb(221, 221, 221);
 }
 .mobile .mainimg {
   max-width: 100px;
@@ -219,5 +253,21 @@ h3 {
     margin: 20px;
     max-width: 300px;
   }
+}
+
+/* transition */
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  /* transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1); */
+  transition: all 0.8s ease-in-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(-250px);
+  opacity: 0;
 }
 </style>
