@@ -69,7 +69,7 @@
                     <button @click="registerNewUser">Continue</button>
                     <div
                         class="policy"
-                    >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
+                    >By continuing, you agree to the Amazing conditions of Use and Privacy Notice from developer <a href="rogersteinbakk.no">www.rogersteinbakk.no</a>.</div>
                     <label class="showpassword" style="margin-bottom: 0;">
                         <h4 style="margin-left: -5px">
                             Sign-In.
@@ -114,7 +114,7 @@
                     <button @click="signIn">Continue</button>
                     <div
                         class="policy"
-                    >By continuing, you agree to Amazon's Conditions of Use and Privacy Notice.</div>
+                    >By continuing, you agree to the Amazing conditions of Use and Privacy Notice from developer <a href="rogersteinbakk.no">www.rogersteinbakk.no</a>.</div>
                 </section>
             </div>
         </div>

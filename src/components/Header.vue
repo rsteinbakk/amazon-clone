@@ -58,11 +58,11 @@ export default {
     getUser() {
       if (this.getUser) {
         this.$toast.info('Signed in.', {
-          // optional options Object
+          position: "bottom",
         })
       } else {
         this.$toast.info('Signed out.', {
-          // optional options Object
+          position: "bottom",
         })
       }
     }
@@ -82,6 +82,7 @@ export default {
   cursor: pointer;
 }
 .mobile-nav-and-logo {
+  z-index: 10;
   display: flex;
   justify-content: space-between;
   width: 100vw;
@@ -177,7 +178,7 @@ header {
   background-color: rgb(6, 25, 39);
   /* position: sticky;
   top: 0; */
-  z-index: 100;
+  z-index: 95;
 }
 .search {
   display: flex;
@@ -255,6 +256,10 @@ nav .signitin span:first-child {
   line-height: 14px;
   height: 14px;
   font-weight: 400;
+}
+.desktop {
+  position: sticky;
+  top: 0;
 }
 @media screen and (max-width: 600px) {
   .mobile {

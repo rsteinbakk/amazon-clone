@@ -69,6 +69,27 @@ body {
   min-height: 100vh;
   /* background-color: rgb(206, 206, 206); */
 }
+
+a {
+  color: rgb(0, 115, 160);
+  text-decoration: none;
+}
+a:hover {
+  color: rgb(219, 143, 2);
+  text-decoration: underline;
+}
+a button {
+  text-decoration: none;
+  color: black;
+}
+
+
+
+header {
+  position: sticky;
+  top: 0;
+}
+
 main {
   padding: 10px 13px;
 }
@@ -102,7 +123,7 @@ button {
 /* transition */
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.7s ease;
+  transition: all 0.3s ease;
 }
 
 .fade-enter-from,

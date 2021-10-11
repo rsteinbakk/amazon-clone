@@ -10,9 +10,13 @@
     "
     >
       <ul>
-        <li>Sjekk inventory når den er full, ikke mulig å legge til flere</li>
-        <li>Lage ShowProduct.vue</li>
-        <li>Lag CheckOut.vue</li>
+        <li>Todo:</li>
+        <!-- <li>Lage ShowProduct.vue</li> -->
+        <!-- <li>Sjekke om besøkende kommer for første gang, i så fall informere om at dette er en test-side</li> -->
+        <li>Stripe funker nå med enkelt produkt som er registrert i Stripe, få stripe til å samkjøre med produktene i nettbutikken </li>
+        <li>Lagre informasjon slik at data ikke blir borte om bruker refresher sida. </li>
+        <li>Lagre ordre på bruker </li>
+  
       </ul>
     </div>
     <div class="container">
@@ -34,30 +38,32 @@
           </div>
         </div>
         </article>-->
+        <section v-for="(product, index) in showProducts" :key="index" class="mobile-border">
+          <article class="mobile">
+            <div class="mainimg" :style="{ 'background-image': 'url(' + product.image + ')' }">
 
-        <article class="mobile" v-for="(product, index) in showProducts" :key="index">
-          <div>
-            <img :src="product.image" class="mainimg" />
+              <!-- <img :src="product.image" class="mainimg" /> -->
+            </div>
+            <div class="mobile-products-description">
+              <h4>{{ product.title }}</h4>
+              <div class="stars">
+                <img :src="checkStarCount(product.rating.rate)" class="star" />
+                <div class="starcount">{{ product.rating.rate }}</div>
+              </div>
+              <div class="price">
+                <small>$</small>
+                {{ product.price.toFixed(2) }}
+                <span
+                  class="instock"
+                >In stock: {{ product.inventory }}</span>
+              </div>
+              <div class="description">{{ product.description }}</div>
+            </div>
+          </article>
+          <div class="cart">
+            <button :disabled="!product.inventory" @click="addProductToCart(product)">Add to cart</button>
           </div>
-          <div class="mobile-products-description">
-            <h4>{{ product.title }}</h4>
-            <div class="stars">
-              <img :src="checkStarCount(product.rating.rate)" class="star" />
-              <div class="starcount">{{ product.rating.rate }}</div>
-            </div>
-            <div class="price">
-              <small>$</small>
-              {{ product.price.toFixed(2) }}
-              <span
-                class="instock"
-              >In stock: {{ product.inventory }}</span>
-            </div>
-            <div class="description">{{ product.description }}</div>
-            <div class="cart">
-              <button :disabled="!product.inventory" @click="addProductToCart(product)">Add to cart</button>
-            </div>
-          </div>
-        </article>
+        </section>
       </div>
     </div>
   </div>
@@ -109,7 +115,7 @@ export default {
     cartTotalItems() {
       const model = this;
       if (this.cartTotalItems) {
-        model.$toast.success('Item added. Go to cart.', {
+        model.$toast.success('Added. Go to cart.', {
           onClick: function () {
             model.$router.push('cart')
           },
@@ -136,11 +142,6 @@ export default {
 </script>
 
 <style scoped>
-.cart {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
 
 .instock {
   font-size: 10px;
@@ -155,19 +156,41 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.mobile {
-  border: 1px solid rgb(221, 221, 221);
+.mobile-border {
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid rgb(221, 221, 221); */
   border-radius: 3px;
   margin-bottom: 15px;
-  padding-right: 5px;
+}
+.mobile {
+  border-radius: 3px;
   display: flex;
   flex-direction: row;
+  height: 180px;
+  max-width: 300px;
 }
 .mobile .mainimg {
-  max-width: 140px;
+  min-width: 130px;
+  max-width: 130px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
   margin: 7px;
 }
 
+.cart {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  
+}
+button {
+  background-color: rgb(255, 187, 0);
+  margin: 7px 40px 20px 15px;
+
+}
 .mobile-products-description {
   margin: 2px 0 0 5px;
 }
@@ -176,16 +199,19 @@ export default {
 }
 .mobile h4 {
   font-weight: 200;
+  font-size: 0.8rem;
   margin: 5px 0;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  /* max-width: 150px; */
 }
 .mobile .description {
   font-size: 13px;
   color: rgb(70, 70, 70);
-
+  min-width: 130px;
+  max-width: 160px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -214,9 +240,13 @@ export default {
     flex-wrap: wrap;
   }
   .mobile {
-    margin: 10px;
+    margin: 5px;
     max-width: 300px;
-    padding: 20px;
+    padding: 15px 15px 0 15px;
+  }
+  .cart button {
+    margin-top: 0;
+    margin-right: 50px;
   }
 }
 </style>

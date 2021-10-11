@@ -12,14 +12,19 @@
         <span class="not-bold">Subtotal</span>
         ${{ cartTotalPrice.toFixed(2) }}
       </h3>
-      <button class="checkout">Proceed to checkout ({{ this.cartTotalItems }} items)</button>
+      <button class="checkout" @click="$router.push('/checkout')">
+        <router-link
+          to="/checkout"
+          style="all: unset"
+        >Proceed to checkout ({{ this.cartTotalItems }} items)</router-link>
+      </button>
     </div>
     <div class="checkout-container" v-else>
       <p></p>The shopping cart is empty.
     </div>
     <transition-group name="slide-fade">
       <div class="mobilecontainer" v-for="(item) in cartProducts" :key="item.id">
-        <div v-if="item > 1">{{ cartProducts[0] }}</div>
+        <!-- <div v-if="item > 1">{{ cartProducts[0] }} test</div> -->
         <article class="mobile">
           <div>
             <img :src="item.image" class="mainimg" />
@@ -51,14 +56,14 @@
         v-if="cartTotalItems.length"
       >&nbsp;</div>
 
-      <h3 v-if="cartTotalItems > 1">
+      <h3 v-if="cartProducts.length > 1">
         <span class="not-bold">Subtotal</span>
         ${{ cartTotalPrice.toFixed(2) }}
       </h3>
-      <button
-        class="checkout"
-        v-if="cartTotalItems > 1"
-      >Proceed to checkout ({{ this.cartTotalItems }} items)</button>
+
+      <button class="checkout" v-if="cartProducts.length > 1"
+          @click="$router.push('/checkout')">Proceed to checkout ({{ this.cartTotalItems }} items)
+      </button>
       <router-link to="/" style="all:unset">
         <button class="checkout" style="margin-top: 30px; ">Continue shopping</button>
       </router-link>
@@ -205,8 +210,10 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 .mobile {
+  min-width: 310px;
   border-radius: 3px;
   margin-top: 10px;
   margin-bottom: 15px;
@@ -219,8 +226,8 @@ h3 {
   border-top: 1px solid rgb(221, 221, 221);
 }
 .mobile .mainimg {
-  max-width: 100px;
-  margin: 7px;
+  max-width: 70px;
+  margin: 7px 20px 7px 7px;
 }
 
 .mobile-products-description {
@@ -231,6 +238,7 @@ h3 {
 }
 .mobile h4 {
   font-weight: 200;
+  font-size: 0.9rem;
   margin: 5px 0;
   overflow: hidden;
   display: -webkit-box;
@@ -239,7 +247,7 @@ h3 {
 }
 
 .price {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 300;
 }
 
