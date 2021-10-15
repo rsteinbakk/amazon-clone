@@ -106,6 +106,12 @@ button {
 .checkout {
   background-color: rgb(245, 224, 40);
 }
+
+.error {
+  text-align: center;
+  color: rgb(219, 0, 0);
+  font-size: 0.7rem;
+}
 /* 
 #nav {
   padding: 30px;

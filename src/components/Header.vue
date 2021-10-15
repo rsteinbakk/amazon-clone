@@ -1,7 +1,7 @@
 <template>
   <header class="desktop">
     <router-link to="/">
-      <img src="https://pngimg.com/uploads/amazon/small/amazon_PNG25.png" class="logo" />
+      <img src="../assets/prodimg/amazon_PNG25.png" class="logo" />
     </router-link>
     <div class="search">
       <input type="text" class="searchinput" placeholder="Search Amazon" />
